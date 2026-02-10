@@ -1,15 +1,368 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
+
 <head>
-    <title>Days+ | D-Day Counter</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Days+ - 소중한 날을 더 특별하게</title>
+    <meta name="description" content="Days+는 당신의 소중한 기념일과 이벤트를 아름답게 기록하고 관리해주는 D-Day 앱입니다.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Pretendard:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #F8F9FE;
+            --text-main: #1A1A1A;
+            --text-sub: #666666;
+            --accent-color: #6B4EFF;
+            /* Indigo */
+            --accent-light: #EBE9FF;
+            --card-bg: #FFFFFF;
+            --gradient-start: #E0DAFF;
+            --gradient-end: #F5F3FF;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-bg: #0F0F12;
+                --text-main: #FFFFFF;
+                --text-sub: #A0A0A0;
+                --card-bg: #1C1C1E;
+                --gradient-start: #2C2060;
+                --gradient-end: #0F0F12;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            padding: 24px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hero */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 100px 0 80px;
+            background: linear-gradient(180deg, var(--gradient-start) 0%, var(--primary-bg) 100%);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #6B4EFF 0%, #9F85FF 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-sub);
+            margin-bottom: 48px;
+            max-width: 600px;
+        }
+
+        .hero-icon {
+            width: 180px;
+            height: 180px;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(107, 78, 255, 0.2);
+            margin-bottom: 40px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .preview-frame {
+            position: relative;
+            max-width: 300px;
+            margin: 0 auto;
+            border-radius: 36px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 8px solid #fff;
+            background: #fff;
+        }
+
+        .preview-img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 28px;
+        }
+
+        .store-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .store-btn {
+            background-color: var(--text-main);
+            color: var(--primary-bg);
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, opacity 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .store-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .store-badge {
+            height: 24px;
+            /* Placeholder for store icons if needed, currently text based for simplicity or use SVGs */
+        }
+
+        /* Features */
+        .features {
+            padding: 80px 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 32px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: 20px;
+            display: inline-block;
+            background-color: var(--accent-light);
+            padding: 12px;
+            border-radius: 16px;
+            color: var(--accent-color);
+        }
+
+        .card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--text-sub);
+            font-size: 16px;
+        }
+
+        /* Preview Section */
+        .preview {
+            text-align: center;
+            padding: 80px 0;
+            overflow: hidden;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.15);
+            margin-top: 40px;
+            /* Placeholder styling */
+            background: #eee;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            color: var(--text-sub);
+            font-size: 14px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Days+ (데이스 플러스)</h1>
-    <p>중요한 날을 기억하고 추억하고 관리하는 가장 쉬운 방법</p>
-    <hr>
-    <h3>Developer Information</h3>
-    <p>상호명: HandRoom</p>
-    <p>문의: handroom0630@gmail.com</p>
-    <p><a href="privacy.html">개인정보처리방침 (Privacy Policy)</a></p>
+
+    <div class="container">
+        <header class="animate-fade-in">
+            <a href="#" class="logo">
+                <img src="AppIcons/Assets.xcassets/AppIcon.appiconset/1024.png" alt="Days+ Logo">
+                Days+
+            </a>
+        </header>
+
+        <section class="hero animate-fade-in delay-100">
+            <img src="AppIcons/Assets.xcassets/AppIcon.appiconset/1024.png" alt="Days+ Icon" class="hero-icon">
+            <h1>소중한 날을 더 특별하게</h1>
+            <p>잊지 못할 순간, 기념일, 그리고 다짐까지.<br>Days+로 아름답게 기록하고 관리하세요.</p>
+
+            <div class="store-buttons">
+                <a href="#" class="store-btn">
+                    <span>App Store</span>
+                </a>
+                <a href="#" class="store-btn">
+                    <span>Google Play</span>
+                </a>
+            </div>
+        </section>
+
+        </section>
+
+        <section class="preview container animate-fade-in delay-200">
+            <div class="preview-frame">
+                <img src="flutter_01.png" alt="Days+ Screenshot" class="preview-img">
+            </div>
+        </section>
+
+        <section class="features container animate-fade-in delay-200">
+            <div class="grid">
+                <div class="card">
+                    <span class="card-icon">📅</span>
+                    <h3>다양한 디데이 계산</h3>
+                    <p>날짜수, 개월수, 매년 반복되는 기념일 등 다양한 계산 방식을 지원합니다.</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">🎨</span>
+                    <h3>감성적인 디자인</h3>
+                    <p>다양한 테마와 아이콘으로 나만의 취향에 맞는 카드를 꾸며보세요.</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">📱</span>
+                    <h3>스마트 위젯</h3>
+                    <p>잠금화면과 홈 화면 위젯으로 소중한 날을 언제나 확인하세요.</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">☁️</span>
+                    <h3>안전한 백업</h3>
+                    <p>iCloud와 파일 백업을 통해 소중한 기록을 안전하게 보관합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Days+. All rights reserved.</p>
+            <p>Designed for simplicity and emotion.</p>
+            <div style="margin-top: 24px;">
+                <a href="privacy.html"
+                    style="color: var(--text-sub); text-decoration: none; font-size: 13px; opacity: 0.8;">개인정보 처리방침</a>
+            </div>
+        </footer>
+    </div>
+
 </body>
+
 </html>
